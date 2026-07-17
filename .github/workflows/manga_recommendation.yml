@@ -1,0 +1,31 @@
+name: Manga Recommendation
+
+on:
+  schedule:
+    # Runs every day at 8:00 AM UTC
+    - cron: "0 14,16,21 * * *"
+
+  workflow_dispatch:
+
+jobs:
+  manga-recommendation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Post random manga recommendation
+        env:
+          FB_USER_TOKEN: ${{ secrets.FB_USER_TOKEN }}
+        run: |
+          python src/main.py

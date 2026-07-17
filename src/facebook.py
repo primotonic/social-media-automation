@@ -34,3 +34,22 @@ def post_to_facebook_page(page_id, page_token, message):
     )
 
     return r.json()
+
+def post_single_image_to_facebook_page(page_id, page_token, message, image_url=None):
+
+    url = f"https://graph.facebook.com/v19.0/{page_id}/photos"
+
+    data = {
+        "caption": message,
+        "access_token": page_token
+    }
+
+    if image_url:
+        data["url"] = image_url
+
+    response = requests.post(
+        url,
+        data=data
+    )
+
+    return response.json()

@@ -1,16 +1,33 @@
 from config import FB_USER_TOKEN
-from facebook import get_page, post_to_facebook_page
-from scraper import get_latest_release
+from anilist.get_random_manga import get_random_manga
+from facebook import get_page, post_single_image_to_facebook_page
 
 
 page = get_page(FB_USER_TOKEN)
+random_manga = get_random_manga()
 
-release = get_latest_release()
+title = (
+    random_manga["title"].get("english")
+    or random_manga["title"].get("romaji")
+)
 
-result = post_to_facebook_page(
+message = f"""📚 Manga Recommendation of the Day!
+
+🔥 {title}
+
+⭐ Score: {random_manga['averageScore']}/100
+
+Genres:
+{', '.join(random_manga['genres'])}
+
+
+"""
+
+result = post_single_image_to_facebook_page(
     page["page_id"],
     page["page_token"],
-    release["message"]
+    message,
+    random_manga["coverImage"]["large"]
 )
 
 print(result)
