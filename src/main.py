@@ -1,5 +1,5 @@
 import sys
-
+import random
 from config import FB_USER_TOKEN
 from anilist.get_random_manga import get_random_manga
 from anilist.get_random_character import get_random_character
@@ -47,8 +47,17 @@ def character_spotlight():
         )
 
     description = character["description"] or "No description available."
-    description = description.replace("\n", " ").replace("__", "")
-    description = description[:500] + "..." if len(description) > 500 else description
+    description = (
+        description
+        .replace("\n", " ")
+        .replace("__", "")
+        .replace("~!", "")
+        .replace("!~", "")
+    )
+
+    MAX_LENGTH = 300
+    if len(description) > MAX_LENGTH:
+        description = description[:MAX_LENGTH].rsplit(" ", 1)[0] + "..."
 
     message = f"""🎭 Character Spotlight!
 
@@ -58,16 +67,40 @@ def character_spotlight():
 
 📝 Description:
 {description}
+
+#MoetakuTV #CharacterSpotlight #Anime #Manga
 """
+
+    footer = """
+
+Watch anime & read manga here:
+https://moetaku.tv
+https://moetaku.online
+"""
+
+    comments = [
+        f"""Have you watched {anime}? Tell us what you think!{footer}""",
+
+        f"""⭐ Is {character['name']['full']} one of your favorite characters?{footer}""",
+
+        f"""🔥 Would you recommend {anime} to other anime fans?{footer}""",
+
+        f"""❤️ What's your favorite moment featuring {character['name']['full']}?{footer}""",
+
+        f"""👇 Share your thoughts below! We'd love to hear from you!{footer}""",
+    ]
+
+    comment_message = random.choice(comments)
 
     result = post_single_image_to_facebook_page(
         page["page_id"],
         page["page_token"],
         message,
         character["image"]["large"],
+        comment_message=comment_message,
     )
 
-    print(result)
+    return result
 
 def main():
     if len(sys.argv) < 2:
