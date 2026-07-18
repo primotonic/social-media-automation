@@ -39,6 +39,14 @@ def character_spotlight():
 
     anime = "Unknown"
 
+    media = character["media"]["nodes"][0]
+    media_type = media["type"]  # "ANIME" or "MANGA"
+    title = (
+        media["title"].get("english")
+        or media["title"].get("romaji")
+    )
+    emoji = "📺" if media_type == "ANIME" else "📚"
+
     if character["media"]["nodes"]:
         media = character["media"]["nodes"][0]
         anime = (
@@ -63,7 +71,7 @@ def character_spotlight():
 
 ✨ {character["name"]["full"]}
 
-📺 Anime: {anime}
+{emoji} {media_type.title()}: {title}
 
 📝 Description:
 {description}
@@ -118,5 +126,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
-    # character_spotlight()
+    # main()
+    character_spotlight()

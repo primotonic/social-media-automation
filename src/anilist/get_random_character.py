@@ -23,6 +23,7 @@ query ($page: Int, $perPage: Int) {
       favourites
       media(perPage: 3) {
         nodes {
+          type
           title {
             english
             romaji
