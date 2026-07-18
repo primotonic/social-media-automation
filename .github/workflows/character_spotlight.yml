@@ -1,0 +1,29 @@
+name: Character Spotlight
+
+on:
+  schedule:
+    # Runs daily at 3:00 PM Philippine Time (7:00 AM UTC).
+    - cron: "0 7 * * *"
+    
+  workflow_dispatch:
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Facebook Automation
+        env:
+          FB_USER_TOKEN: ${{ secrets.FB_USER_TOKEN }}
+        run: python src/main.py character_spotlight
