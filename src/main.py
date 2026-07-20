@@ -124,7 +124,4 @@ def main():
     else:
         print(f"Unknown command: {command}")
 
-
-if __name__ == "__main__":
-    # main()
-    character_spotlight()
+character_spotlight()
