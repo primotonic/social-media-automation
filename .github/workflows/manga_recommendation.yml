@@ -21,11 +21,9 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
+        run: pip install -r requirements.txt
 
       - name: Post random manga recommendation
         env:
           FB_USER_TOKEN: ${{ secrets.FB_USER_TOKEN }}
-        run: |
-          # python src/main.py manga_recommendation
+        run: python src/main.py manga_recommendation
