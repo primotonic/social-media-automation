@@ -8,7 +8,7 @@ from daily_text_posts import get_random_daily_post
 
 page = get_page(FB_USER_TOKEN)
 
-def random_manga():
+def manga_recommendation():
     random_manga = get_random_manga()
 
     title = (
@@ -16,13 +16,34 @@ def random_manga():
         or random_manga["title"].get("romaji")
     )
 
+    description = random_manga['description'] or "No description available."
+    description = (
+            description
+            .replace("\n", " ")
+            .replace("__", "")
+            .replace("~!", "")
+            .replace("!~", "")
+        )
+    
+    MAX_LENGTH = 300
+    if len(description) > MAX_LENGTH:
+        description = description[:MAX_LENGTH].rsplit(" ", 1)[0] + "..."
+
     message = f"""📚 Manga Recommendation of the Day!
 
 🔥 {title}
 
-Description: {random_manga['description']}
+Description: {description}
 
 Genres: {', '.join(random_manga['genres'])}
+
+#MoetakuTV #MangaRecommendation #Manga #Anime #Otaku #MangaFans #AnimeCommunity #ReadManga
+"""
+
+    comment_message = f"""📖 Read {title}:
+
+🌐 https://moetaku.tv
+🌐 https://moetaku.online
 """
 
     result = post_single_image_to_facebook_page(
@@ -30,10 +51,10 @@ Genres: {', '.join(random_manga['genres'])}
         page["page_token"],
         message,
         random_manga["coverImage"]["large"],
+        comment_message=comment_message
     )
 
-    print(result)
-
+    return result
 
 def character_spotlight():
     character = get_random_character()
@@ -129,13 +150,13 @@ https://moetaku.online"""
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python src/main.py [manga|character_spotlight|random_daily_posts]")
+        print("Usage: python src/main.py [manga_recommendation|character_spotlight|random_daily_posts]")
         return
 
     command = sys.argv[1].lower()
 
-    if command == "manga":
-        random_manga()
+    if command == "manga_recommendation":
+        manga_recommendation()
     elif command == "character_spotlight":
         character_spotlight()
     elif command == "random_daily_posts":
@@ -146,4 +167,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-# random_daily_posts()
+# manga_recommendation()

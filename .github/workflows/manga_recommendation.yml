@@ -1,31 +1,31 @@
-# name: Manga Recommendation
+name: Manga Recommendation
 
-# on:
-#   schedule:
-#     # Runs daily at 12:00 PM Philippine Time (4:00 AM UTC).
-#     - cron: "0 4 * * *"
+on:
+  schedule:
+    # Runs daily at 8:00 AM Philippine Time (12:00 AM UTC)
+    - cron: "0 0 * * *"
 
-#   workflow_dispatch:
+  workflow_dispatch:
 
-# jobs:
-#   manga-recommendation:
-#     runs-on: ubuntu-latest
+jobs:
+  manga-recommendation:
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - name: Checkout repository
-#         uses: actions/checkout@v4
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-#       - name: Setup Python
-#         uses: actions/setup-python@v5
-#         with:
-#           python-version: "3.12"
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
 
-#       - name: Install dependencies
-#         run: |
-#           pip install -r requirements.txt
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
 
-#       - name: Post random manga recommendation
-#         env:
-#           FB_USER_TOKEN: ${{ secrets.FB_USER_TOKEN }}
-#         run: |
-#           # python src/main.py manga
+      - name: Post random manga recommendation
+        env:
+          FB_USER_TOKEN: ${{ secrets.FB_USER_TOKEN }}
+        run: |
+          # python src/main.py manga_recommendation
