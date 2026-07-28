@@ -3,7 +3,8 @@ import random
 from config import FB_USER_TOKEN
 from anilist.get_random_manga import get_random_manga
 from anilist.get_random_character import get_random_character
-from facebook import get_page, post_single_image_to_facebook_page
+from facebook import get_page, post_to_facebook_page, post_single_image_to_facebook_page, comment_on_post
+from daily_text_posts import get_random_daily_post
 
 page = get_page(FB_USER_TOKEN)
 
@@ -110,9 +111,25 @@ https://moetaku.online
 
     return result
 
+def random_daily_posts():
+    message = get_random_daily_post()
+    result = post_to_facebook_page(
+        page["page_id"],
+        page["page_token"], 
+        message
+    )
+
+    comment_on_post(
+        result["id"], 
+        page["page_token"],
+        """Watch anime & read manga here:
+https://moetaku.tv
+https://moetaku.online"""
+    )
+
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python src/main.py [manga|character_spotlight]")
+        print("Usage: python src/main.py [manga|character_spotlight|random_daily_posts]")
         return
 
     command = sys.argv[1].lower()
@@ -121,7 +138,12 @@ def main():
         random_manga()
     elif command == "character_spotlight":
         character_spotlight()
+    elif command == "random_daily_posts":
+        random_daily_posts()
     else:
         print(f"Unknown command: {command}")
 
-character_spotlight()
+if __name__ == "__main__":
+    main()
+
+# random_daily_posts()
