@@ -25,6 +25,7 @@ REQUEST_TIMEOUT_SECONDS=30
 ## Run an action
 
 ```bash
+python src/main.py anime_recommendation
 python src/main.py manga_recommendation
 python src/main.py character_spotlight
 python src/main.py random_daily_posts

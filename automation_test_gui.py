@@ -29,6 +29,14 @@ from social_media_automation.models import Post  # noqa: E402
 from social_media_automation.providers import FacebookPageProvider  # noqa: E402
 
 
+ACTION_LABELS = {
+    "anime_recommendation": "Anime Recommendation",
+    "character_spotlight": "Character Spotlight",
+    "manga_recommendation": "Manga Recommendation",
+    "random_daily_posts": "Random Daily Posts",
+}
+
+
 class AutomationTestGUI(tk.Tk):
     def __init__(self) -> None:
         super().__init__()
@@ -50,10 +58,20 @@ class AutomationTestGUI(tk.Tk):
 
         actions = ttk.LabelFrame(outer, text="Automations", padding=10)
         actions.pack(fill="x")
-        for column, (name, variable) in enumerate(self.action_vars.items()):
-            ttk.Checkbutton(actions, text=name, variable=variable).grid(
-                row=0, column=column, padx=(0, 18), sticky="w"
+        for index, (name, variable) in enumerate(self.action_vars.items()):
+            ttk.Checkbutton(
+                actions,
+                text=ACTION_LABELS.get(name, name.replace("_", " ").title()),
+                variable=variable,
+            ).grid(
+                row=index // 2,
+                column=index % 2,
+                padx=(0, 24),
+                pady=3,
+                sticky="w",
             )
+        actions.columnconfigure(0, weight=1)
+        actions.columnconfigure(1, weight=1)
 
         controls = ttk.Frame(outer, padding=(0, 10))
         controls.pack(fill="x")

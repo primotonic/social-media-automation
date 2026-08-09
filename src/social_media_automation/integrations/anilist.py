@@ -44,6 +44,29 @@ class AniListClient:
         manga["description"] = clean_description(manga.get("description"))
         return manga
 
+    def get_random_anime(self) -> dict[str, Any]:
+        query = """
+        query ($page: Int, $perPage: Int) {
+          Page(page: $page, perPage: $perPage) {
+            media(
+              type: ANIME
+              sort: POPULARITY_DESC
+              averageScore_greater: 80
+              status: FINISHED
+            ) {
+              id title { romaji english } coverImage { large }
+              description(asHtml: false) genres episodes seasonYear siteUrl
+            }
+          }
+        }
+        """
+        data = self._query(
+            query, {"page": self._rng.randint(1, 20), "perPage": 10}
+        )
+        anime = self._rng.choice(data["Page"]["media"])
+        anime["description"] = clean_description(anime.get("description"))
+        return anime
+
     def get_random_character(self, max_attempts: int = 5) -> dict[str, Any]:
         query = """
         query ($page: Int, $perPage: Int) {
